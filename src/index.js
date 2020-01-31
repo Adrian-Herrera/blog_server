@@ -17,7 +17,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Middlewares
 app.use(morgan("dev"));
 
-
 // Global Variables
 app.use((req, res, next) => {
   next();
@@ -29,12 +28,13 @@ app.use(require("./routes/authentication"));
 app.use("/links", require("./routes/links"));
 
 // Public
-if(process.env.NODE_ENV === "production"){
-
+if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../public")));
 
   // Handle SPA
-  app.get(/.*/, (req, res => res.sendFile(__dirname + "../public/index.html")));
+  app.get(/.*/, function(req, res) {
+    res.sendFile(__dirname + "../public/index.html");
+  });
 }
 
 // Starting the server

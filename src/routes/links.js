@@ -35,7 +35,13 @@ router.post("/editPost", async (req, res) => {
 // get
 
 router.get("/postList", async (req, res) => {
-  const data = await pool.query("SELECT * FROM articles");
+  const data = await pool.query("SELECT * FROM articles WHERE Active=1");
+  //console.log(data);
+  res.send(data);
+});
+
+router.get("/post", async (req, res) => {
+  const data = await pool.query("SELECT * FROM articles WHERE Active=1 AND Public=1");
   //console.log(data);
   res.send(data);
 });

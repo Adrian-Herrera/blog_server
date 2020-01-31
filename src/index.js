@@ -29,7 +29,13 @@ app.use(require("./routes/authentication"));
 app.use("/links", require("./routes/links"));
 
 // Public
-app.use(express.static(path.join(__dirname, "public")));
+if(process.env.NODE_ENV === "production"){
+
+  app.use(express.static(path.join(__dirname, "../public")));
+
+  // Handle SPA
+  app.get(/.*/, (req, res => res.sendFile(__dirname + "../public/index.html")));
+}
 
 // Starting the server
 app.listen(app.get("port"), () => {

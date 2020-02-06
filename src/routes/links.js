@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
-
+const { isLoggedIn } = require("../lib/auth");
 const pool = require("../database");
 
+const passport = require("passport");
+
+
 router.post("/newPost", async (req, res) => {
-  const { Title, Description,  Body, Id_cat, Public } = req.body.data;
+  const { Title, Description, Body, Id_cat, Public } = req.body.data;
   const newLink = {
     Title,
     Description,
@@ -13,11 +16,12 @@ router.post("/newPost", async (req, res) => {
     Public
   };
   await pool.query("INSERT INTO articles set ?", [newLink]);
+
   res.status(200).send("Recibido");
 });
 
 router.post("/editPost", async (req, res) => {
-  const { Id_art, Title, Description,  Body, Id_cat, Public } = req.body.data;
+  const { Id_art, Title, Description, Body, Id_cat, Public } = req.body.data;
   const editPost = {
     Id_art,
     Title,
@@ -26,7 +30,10 @@ router.post("/editPost", async (req, res) => {
     Id_cat,
     Public
   };
-  await pool.query("UPDATE articles set ? WHERE Id_art = ?", [editPost, editPost.Id_art]);
+  await pool.query("UPDATE articles set ? WHERE Id_art = ?", [
+    editPost,
+    editPost.Id_art
+  ]);
   console.log(editPost);
   console.log(editPost.Id_art);
   res.status(200).send("Recibido");
@@ -34,14 +41,19 @@ router.post("/editPost", async (req, res) => {
 
 // get
 
+
+
 router.get("/postList", async (req, res) => {
   const data = await pool.query("SELECT * FROM articles WHERE Active=1");
   //console.log(data);
+  req.flash("success", "Editado correctamente");
   res.send(data);
 });
 
 router.get("/post", async (req, res) => {
-  const data = await pool.query("SELECT * FROM articles WHERE Active=1 AND Public=1");
+  const data = await pool.query(
+    "SELECT * FROM articles WHERE Active=1 AND Public=1"
+  );
   //console.log(data);
   res.send(data);
 });

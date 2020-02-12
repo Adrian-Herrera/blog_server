@@ -86,10 +86,11 @@ router.get("/publicvideos", async (req, res) => {
 
 router.post("/videos", async (req, res) => {
   console.log(req.body);
-  const { Name, VideoURL } = req.body;
+  const { Name, VideoURL, Public } = req.body;
   const newLink = {
     Name,
-    VideoURL
+    VideoURL,
+    Public
   };
   await pool.query("INSERT INTO videos set ?", [newLink]);
 

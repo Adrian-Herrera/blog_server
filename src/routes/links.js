@@ -5,7 +5,6 @@ const pool = require("../database");
 
 const passport = require("passport");
 
-
 router.post("/newPost", async (req, res) => {
   const { Title, Description, Body, Id_cat, Public } = req.body.data;
   const newLink = {
@@ -41,8 +40,6 @@ router.post("/editPost", async (req, res) => {
 
 // get
 
-
-
 router.get("/postList", async (req, res) => {
   const data = await pool.query("SELECT * FROM articles WHERE Active=1");
   //console.log(data);
@@ -73,6 +70,46 @@ router.get("/updatePost/:id", async (req, res) => {
   // console.log(id);
   res.send(data);
   // res.send("Editado");
+});
+
+// Videos
+
+router.get("/videos", async (req, res) => {
+  const data = await pool.query("SELECT * FROM videos WHERE Active=1");
+  res.send(data);
+});
+
+router.get("/publicvideos", async (req, res) => {
+  const data = await pool.query("SELECT * FROM videos WHERE Public=1");
+  res.send(data);
+});
+
+router.post("/videos", async (req, res) => {
+  console.log(req.body);
+  const { Name, VideoURL } = req.body;
+  const newLink = {
+    Name,
+    VideoURL
+  };
+  await pool.query("INSERT INTO videos set ?", [newLink]);
+
+  res.status(200).send("Recibido");
+});
+
+router.post("/editVideo", async (req, res) => {
+  const { Id_vid, Name, VideoURL, Active, Public } = req.body.data;
+  const editVideo = {
+    Id_vid,
+    Name,
+    VideoURL,
+    Active,
+    Public
+  };
+  await pool.query("UPDATE videos set ? WHERE Id_vid = ?", [
+    editVideo,
+    editVideo.Id_vid
+  ]);
+  res.status(200).send("Recibido");
 });
 
 module.exports = router;

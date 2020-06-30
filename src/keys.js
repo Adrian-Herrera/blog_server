@@ -5,8 +5,8 @@ module.exports = {
     // password: "LUUcYCIaXv",
     // database: "N5WyJ1oIbN"
     host: "localhost",
-    user: "root",
+    user: "id13366638_riesgo",
     password: "",
-    database: "riesgofinanciero"
+    database: "id13366638_riesgofinanciero"
   }
 };

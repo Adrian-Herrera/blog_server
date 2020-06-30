@@ -5,6 +5,8 @@ const pool = require("../database");
 
 const passport = require("passport");
 
+//Post
+
 router.post("/newPost", async (req, res) => {
   const { Title, Description, Body, Id_cat, Public } = req.body.data;
   const newLink = {
@@ -113,4 +115,54 @@ router.post("/editVideo", async (req, res) => {
   res.status(200).send("Recibido");
 });
 
+// Users
+
+router.get("/users", async (req, res) => {
+  const data = await pool.query("SELECT * FROM users");
+  res.send(data);
+});
+
+// Admin Activate user
+router.post("/userActive", async (req, res) => {
+  const { Id_usr, Active } = req.body;
+  const changeActive = {
+    Id_usr,
+    Active
+  };
+  if (changeActive.Active == 1) {
+    changeActive.Active = 0;
+  } else {
+    changeActive.Active = 1;
+  }
+  console.log(changeActive);
+  await pool.query("UPDATE users set ? WHERE Id_usr = ?", [
+    changeActive,
+    changeActive.Id_usr
+  ]);
+  res.status(200).send("Recibido");
+});
+
+//perfil
+// Get only one user
+router.get("/perfil/:id", async (req, res) => {
+  const id = req.params.id;
+  const data = await pool.query(
+    "SELECT * FROM users WHERE id_usr = ?",
+    id,
+    (error, result) => {
+      if (error) throw error;
+      res.send(result);
+    }
+  );                      
+});
+// Update user info
+router.put('/profile/:id', (request, response) => {
+  const id = request.params.id;
+  const data = request.body.data
+
+  pool.query('UPDATE users SET ? WHERE id_usr = ?', [data, id], (error, result) => {
+      if (error) throw error;
+      response.send('User updated successfully.');
+  });
+});
 module.exports = router;

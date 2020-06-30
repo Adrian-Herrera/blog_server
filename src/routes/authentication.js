@@ -11,7 +11,6 @@ router.post("/login", function(req, res, next) {
       return res.send({ success: false, message: err });
     } else {
       console.log(user);
-      console.log("auth " + req.isAuthenticated());
       return res.send({
         success: true,
         message:

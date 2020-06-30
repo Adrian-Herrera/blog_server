@@ -12,7 +12,7 @@ passport.use(
     passReqToCallback: true
   }, async (req, mail, password, done) => {
     // console.log(req.body);
-    const rows = await pool.query("SELECT * FROM users WHERE Mail = ?", [mail]);
+    const rows = await pool.query("SELECT * FROM users WHERE Mail = ? AND Active = 1", [mail]);
     if (rows.length > 0) {
       const user = rows[0];
       // console.log(user);
@@ -24,7 +24,7 @@ passport.use(
         done("Contraseña incorrecta")
       }
     } else {
-      return done("El correo no existe")
+      return done("El correo no existe o no fue verificado aun.")
     }
   })
 );

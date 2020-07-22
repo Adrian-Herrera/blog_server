@@ -5,8 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/",
-    "dev": "nodemon src/",
-    "build": "webpack"
+    "dev": "nodemon src/"
   },
   "repository": {
     "type": "git",
